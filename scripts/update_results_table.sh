@@ -4,6 +4,9 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 RUNS_DIR="${ROOT_DIR}/runs"
 OUTPUT_MD="${ROOT_DIR}/reports/results_table.md"
+README_MD="${ROOT_DIR}/README.md"
+MARKER_BEGIN="<!-- RESULTS_TABLE_BEGIN -->"
+MARKER_END="<!-- RESULTS_TABLE_END -->"
 
 if [[ ! -d "${RUNS_DIR}" ]]; then
   echo "No runs directory found at ${RUNS_DIR}"
@@ -12,7 +15,7 @@ fi
 
 mkdir -p "$(dirname "${OUTPUT_MD}")"
 
-python3 - "${RUNS_DIR}" "${OUTPUT_MD}" <<'PY'
+python3 - "${RUNS_DIR}" "${OUTPUT_MD}" "${README_MD}" "${MARKER_BEGIN}" "${MARKER_END}" <<'PY'
 import json
 import sys
 from collections import defaultdict
@@ -22,6 +25,9 @@ import re
 
 runs_dir = Path(sys.argv[1])
 output_md = Path(sys.argv[2])
+readme_md = Path(sys.argv[3])
+marker_begin = sys.argv[4]
+marker_end = sys.argv[5]
 
 rows = []
 
@@ -117,4 +123,28 @@ else:
 lines.append("")
 output_md.write_text("\n".join(lines), encoding="utf-8")
 print(f"Wrote {output_md}")
+
+# README: same table body as reports/results_table.md (no H1 title).
+readme_lines = lines[1:]
+if readme_lines and readme_lines[0] == "":
+    readme_lines = readme_lines[1:]
+readme_block = "\n".join(readme_lines).rstrip() + "\n"
+
+text = readme_md.read_text(encoding="utf-8")
+if marker_begin not in text or marker_end not in text:
+    raise SystemExit(
+        f"README missing {marker_begin!r} / {marker_end!r}; cannot splice table."
+    )
+before, rest = text.split(marker_begin, 1)
+_, after = rest.split(marker_end, 1)
+new_readme = (
+    before
+    + marker_begin
+    + "\n"
+    + readme_block
+    + marker_end
+    + after
+)
+readme_md.write_text(new_readme, encoding="utf-8")
+print(f"Updated {readme_md}")
 PY
