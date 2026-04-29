@@ -1,53 +1,41 @@
 # llm_benchmarking
 
-Local, repeatable LLM benchmark suite for coding-quality and token-oriented metrics on your hardware using `ollama`, with human-readable Markdown summaries and generated charts.
+Thin local wrapper around [`geerlingguy/ai-benchmarks`](https://github.com/geerlingguy/ai-benchmarks), using upstream `obench.sh` for Ollama throughput runs.
 
-## Phase 1 Scope
+## What This Repo Does
 
-- Benchmark coding tasks only.
-- Run local models served through `ollama`.
-- Track Hugging Face provenance metadata for each model.
-- Keep execution and reporting separate.
-
-## Repository Layout
-
-- `benchmarks/tasks/`: coding tasks and scoring metadata.
-- `benchmarks/configs/`: run configs and model provenance fields.
-- `scripts/run_benchmarks.py`: run execution only (writes raw artifacts).
-- `scripts/build_reports.py`: reporting only (reads artifacts, writes charts/docs).
-- `runs/`: raw artifacts (`jsonl` and summaries) grouped by run id.
-- `reports/`: generated images.
-- `docs/results/`: generated human-readable result pages.
+- Uses upstream benchmark scripts (no custom benchmark engine).
+- Stores local run artifacts in this repo for repeatability:
+  - `results.jsonl`
+  - `run_manifest.json`
+- Tracks system/tuning metadata with each run.
 
 ## Quickstart
 
-1. Install and run `ollama`.
-2. Pull a local model in ollama (example):
-   - `ollama pull qwen2.5-coder:7b`
-3. Run a dry benchmark:
-   - `python3 scripts/run_benchmarks.py --config benchmarks/configs/local_baseline.json --dry-run`
-4. Build report artifacts:
-   - `python3 scripts/build_reports.py --run-dir runs/latest`
+1. Make sure Ollama is installed and can run your model:
+   - `ollama run llama3.2:3b`
+2. Run benchmark(s):
+   - `python3 scripts/run_geerling_bench.py --models "llama3.2:3b" --count 3`
+   - `python3 scripts/run_geerling_bench.py --models "llama3.2:3b,qwen2.5-coder:7b" --count 3`
 
-## Reproducibility Rules
+The script clones/updates upstream `ai-benchmarks` under `tools/ai-benchmarks` and executes `obench.sh` directly.
 
-- Every run must include hardware, OS, and tuning metadata.
-- Raw run artifacts are source-of-truth; reports are derived outputs.
-- Do not mix benchmark execution and report generation in the same script.
+## Output Layout
 
-## Current Status
+- `runs/run_YYYYMMDD_HHMMSSZ/`
+  - `results.jsonl` (one record per model iteration)
+  - `run_manifest.json` (model provenance + system/tuning metadata)
+  - `<model>.log` (raw `obench.sh` output per model)
+- `runs/latest` symlink points to the newest run.
+- `reports/results_table.md` is the tracked markdown summary table.
 
-Bootstrap scaffolding is in place. Use dry-run first to verify pipeline, then run with real models.
+## Update Tracking Table
 
-## Verification
+Rebuild the markdown table from local run artifacts:
 
-Dry-run pipeline executed successfully:
+- `bash scripts/update_results_table.sh`
 
-- Command: `python3 scripts/run_benchmarks.py --config benchmarks/configs/local_baseline.json --dry-run`
-- Command: `python3 scripts/build_reports.py --run-dir runs/latest`
-- Artifacts:
-  - `runs/run_20260429_114512Z/results.jsonl`
-  - `runs/run_20260429_114512Z/run_manifest.json`
-  - `runs/run_20260429_114512Z/report_summary.json`
-  - `docs/results/run_20260429_114512Z.md`
-  - `reports/run_20260429_114512Z_score_latency.png`
+## Notes
+
+- To pin upstream exactly, use `--no-update` and manage `tools/ai-benchmarks` commit yourself.
+- Use `docs/hardware.md` to keep a stable hardware/tuning profile for fair comparisons.

@@ -22,6 +22,7 @@ Record this once per hardware profile and reference it in run notes.
 - Active tuned profile:
 - CPU governor:
 - Swap configuration:
+- Swappiness:
 - Thermals/cooling notes:
 
 ## Notes

@@ -8,8 +8,10 @@ __pycache__/
 .env
 
 # Benchmark runtime noise
-runs/tmp/
-runs/**/*.log
+runs/*
+!runs/.gitkeep
+tools/ai-benchmarks/
+tools/llama.cpp/
 
 # OS/editor
 .DS_Store
