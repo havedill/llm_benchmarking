@@ -1,0 +1,23 @@
+---
+description: Enforce repeatable benchmark workflow and metadata capture
+alwaysApply: true
+---
+
+# Benchmark Repeatability Rule
+
+## Scope
+
+Applies to benchmark runner, report builder, configs, and docs.
+
+## Requirements
+
+1. Do not mix run execution with report generation in one script.
+2. All runs must write:
+   - `results.jsonl`
+   - `run_manifest.json`
+3. `run_manifest.json` must include:
+   - model provenance (`ollama_model`, HF repo/revision, digest, quantization)
+   - system metadata (OS/kernel/CPU/RAM)
+   - OS tuning metadata (`tuned` status/profile, governor, notes)
+4. Run directories must follow `run_YYYYMMDD_HHMMSSZ`.
+5. Reports must be generated from run artifacts only; no invented metrics.

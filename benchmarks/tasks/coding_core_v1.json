@@ -1,0 +1,18 @@
+[
+  {
+    "task_id": "bugfix_null_guard_001",
+    "title": "Add null guard",
+    "prompt": "Add a null guard to prevent crash when user profile is missing and return a sensible default.",
+    "category": "bugfix",
+    "difficulty": "easy",
+    "expected_signals": ["null-check", "default-return", "no-regression"]
+  },
+  {
+    "task_id": "refactor_extract_helper_001",
+    "title": "Extract helper",
+    "prompt": "Refactor repeated parsing logic into one helper function without changing behavior.",
+    "category": "refactor",
+    "difficulty": "medium",
+    "expected_signals": ["helper-function", "no-behavior-change", "reduced-duplication"]
+  }
+]

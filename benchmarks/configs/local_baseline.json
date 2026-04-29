@@ -1,0 +1,17 @@
+{
+  "benchmark_version": "coding_core_v1",
+  "tasks_file": "benchmarks/tasks/coding_core_v1.json",
+  "output_root": "runs",
+  "model": {
+    "ollama_model": "qwen2.5-coder:7b",
+    "huggingface_repo": "Qwen/Qwen2.5-Coder-7B-Instruct",
+    "huggingface_revision": "main",
+    "model_digest": null,
+    "quantization": "q4_k_m"
+  },
+  "runtime": {
+    "temperature": 0.0,
+    "max_tokens": 512,
+    "timeout_seconds": 120
+  }
+}

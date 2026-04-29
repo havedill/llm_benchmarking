@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Local environment
+.venv/
+.env
+
+# Benchmark runtime noise
+runs/tmp/
+runs/**/*.log
+
+# OS/editor
+.DS_Store
+Thumbs.db
