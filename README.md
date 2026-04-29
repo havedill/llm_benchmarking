@@ -38,3 +38,16 @@ Local, repeatable LLM benchmark suite for coding-quality and token-oriented metr
 ## Current Status
 
 Bootstrap scaffolding is in place. Use dry-run first to verify pipeline, then run with real models.
+
+## Verification
+
+Dry-run pipeline executed successfully:
+
+- Command: `python3 scripts/run_benchmarks.py --config benchmarks/configs/local_baseline.json --dry-run`
+- Command: `python3 scripts/build_reports.py --run-dir runs/latest`
+- Artifacts:
+  - `runs/run_20260429_114512Z/results.jsonl`
+  - `runs/run_20260429_114512Z/run_manifest.json`
+  - `runs/run_20260429_114512Z/report_summary.json`
+  - `docs/results/run_20260429_114512Z.md`
+  - `reports/run_20260429_114512Z_score_latency.png`
