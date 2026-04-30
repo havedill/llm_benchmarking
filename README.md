@@ -40,6 +40,7 @@ Generated from local `runs/` artifacts via `scripts/update_results_table.sh`.
 | run_20260429_151648Z | 2026-04-29 15:16:48Z | iambpn/nanbeige4.1-3B | 1 | 4.87 | 4.87 | 4.87 |
 | run_20260429_154744Z | 2026-04-29 15:47:44Z | iambpn/nanbeige4.1-3B | 10 | 4.63 | 4.41 | 4.85 |
 | run_20260429_142619Z | 2026-04-29 14:26:19Z | qwen2.5-coder:7b | 10 | 4.31 | 4.25 | 4.39 |
+| run_20260430_103134Z | 2026-04-30 10:31:34Z | granite4.1:8b | 10 | 3.92 | 3.88 | 3.95 |
 <!-- RESULTS_TABLE_END -->
 
 Refresh this table after new runs:
