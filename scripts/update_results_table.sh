@@ -60,6 +60,9 @@ for run_dir in sorted(runs_dir.glob("run_*")):
                 created_short = datetime.fromisoformat(created).strftime("%Y-%m-%d %H:%M:%SZ")
             except ValueError:
                 pass
+        comment = manifest.get("comment", "")
+    else:
+        comment = ""
 
     by_model = defaultdict(list)
     for raw in results_path.read_text(encoding="utf-8").splitlines():
@@ -80,6 +83,7 @@ for run_dir in sorted(runs_dir.glob("run_*")):
                 "run_id": run_dir.name,
                 "created": created_short,
                 "model": model,
+                "comment": comment,
                 "iterations": len(rates),
                 "mean": mean_rate,
                 "min": min(rates),
@@ -107,18 +111,19 @@ lines.append("# Benchmark Results Table")
 lines.append("")
 lines.append("Generated from local `runs/` artifacts via `scripts/update_results_table.sh`.")
 lines.append("")
-lines.append("| Run ID | Created UTC | Model | Iterations | Mean tok/s | Min tok/s | Max tok/s |")
-lines.append("|---|---|---|---:|---:|---:|---:|")
+lines.append("| Run ID | Created UTC | Model | Comment | Iterations | Mean tok/s | Min tok/s | Max tok/s |")
+lines.append("|---|---|---|---|---:|---:|---:|---:|")
 
 if rows:
     for row in rows:
         created_display = normalize_created(row["created"], row["run_id"])
+        comment_display = str(row.get("comment", "")).replace("|", "/").replace("\n", " ").strip()
         lines.append(
-            f"| {row['run_id']} | {created_display} | {row['model']} | {row['iterations']} | "
+            f"| {row['run_id']} | {created_display} | {row['model']} | {comment_display} | {row['iterations']} | "
             f"{row['mean']:.2f} | {row['min']:.2f} | {row['max']:.2f} |"
         )
 else:
-    lines.append("| _no runs found_ | - | - | - | - | - | - |")
+    lines.append("| _no runs found_ | - | - | - | - | - | - | - |")
 
 lines.append("")
 output_md.write_text("\n".join(lines), encoding="utf-8")

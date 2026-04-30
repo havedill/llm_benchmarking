@@ -133,6 +133,11 @@ def main():
         default=None,
         help="Optional command path to pass through to obench.sh --ollama-bin",
     )
+    parser.add_argument(
+        "--comment",
+        default="",
+        help="Optional run note to capture tuning/config changes for result tables",
+    )
     parser.add_argument("--output-root", default="runs", help="Root output directory")
     args = parser.parse_args()
 
@@ -162,6 +167,7 @@ def main():
     manifest = {
         "run_id": run_id,
         "created_at_utc": now.isoformat(),
+        "comment": args.comment,
         "runner": "geerlingguy/ai-benchmarks obench.sh",
         "upstream_repo": UPSTREAM_REPO,
         "upstream_commit": upstream_commit,

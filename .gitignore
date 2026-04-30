@@ -16,3 +16,5 @@ tools/llama.cpp/
 # OS/editor
 .DS_Store
 Thumbs.db
+
+reports/
